@@ -136,7 +136,9 @@ ul {
     margin: 0;
     padding: 0;
     border-bottom: 1px solid #9b8dc9;
+    padding-top: 19px;
     padding-bottom: 19px;
+    line-height: 22px;
 }
 
 .filter-repos {
