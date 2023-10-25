@@ -66,4 +66,16 @@ const getRepoInfo = async function(repoName) {
     // Grab languages
     const fetchLanguages = await fetch(repoInfo.languages_url);
     const languageData = await fetchLanguages.json();
+
+    const languages = [];
+    for(const language in lauguageData) {
+        languages.push(language);
+    }
+
+    displayRepoInfo(repoInfo, languages);
 };
+
+const displayRepoInfo = function(repoInfo, languages) {
+    repoData.innerHTML = "";
+    
+}
