@@ -1,8 +1,10 @@
-const overview = document.querySelector(".overview"); // div containing profile info
-const username = "adam-britt"; // username
-const repoList = document.querySelector(".repo-list"); // ul containing repos
-const allReposContainer = document.querySelector(".repos");
-const repoData = document.querySelector(".repo-data");
+const overview = document.querySelector(".overview");       // div containing profile info
+const username = "adam-britt";                              // username
+const repoList = document.querySelector(".repo-list");      // ul containing repos
+const allReposContainer = document.querySelector(".repos"); // repos section
+const repoData = document.querySelector(".repo-data");      // repo details section
+const backToGallery = document.querySelector(".view-repos");// Back to Repo Gallery button
+const filterInput = document.querySelector(".filter-repos"); // user input box to search for a repo
 
 const getUserInfo = async function() {
     const userInfo = await fetch(`https://api.github.com/users/${username}`);
@@ -42,6 +44,7 @@ const getRepos = async function() {
 
 // Display repos
 const displayRepos = function(repos) {
+    filterInput.classList.remove("hide");
     for(const repo of repos) {
         const repoItem = document.createElement("li");
         repoItem.classList.add("repo");
@@ -67,6 +70,7 @@ const getRepoInfo = async function(repoName) {
     // Grab languages
     const fetchLanguages = await fetch(repoInfo.languages_url);
     const languageData = await fetchLanguages.json();
+    // Make a list of languages
     const languages = [];
     for(const language in languageData) {
         languages.push(language);
@@ -79,6 +83,7 @@ const displayRepoInfo = function(repoInfo, languages) {
     repoData.innerHTML = "";
     repoData.classList.remove("hide");
     allReposContainer.classList.add("hide");
+    backToGallery.classList.remove("hide");
     const div = document.createElement("div");
     div.innerHTML = `
         <h3>Name: ${repoInfo.name}</p>
@@ -91,3 +96,24 @@ const displayRepoInfo = function(repoInfo, languages) {
     console.log(repoData);
 };
 
+backToGallery.addEventListener("click", function() {
+    allReposContainer.classList.remove("hide");
+    repoData.classList.add("hide");
+    backToGallery.classList.add("hide");
+});
+
+// Dynamic Search
+filterInput.addEventListener("input", function(e) {
+    const searchText = e.target.value;
+    const repos = document.querySelectorAll(".repo");
+    const searchLowerText = searchText.toLowerCase();
+    
+    for(const repo of repos) {
+        const repoLowerText = repo.innerText.toLowerCase();
+        if(repoLowerText.includes(searchLowerText)) {
+            repo.classList.remove("hide");
+        } else {
+            repo.classList.add("hide");
+        }
+    }
+});
